@@ -1,0 +1,32 @@
+name: Clean Forked Repositories
+
+on:
+  workflow_dispatch:
+    inputs:
+      delete_repositories:
+        description: "Set to true to delete matching repositories"
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Run cleaner
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          DELETE_REPOS: ${{ inputs.delete_repositories }}
+        run: python main.py
