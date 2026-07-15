@@ -106,7 +106,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    token = os.getenv("GH_PAT") or os.getenv("GITHUB_TOKEN")
+    token = os.getenv("GH_PAT") or os.getenv("GITHUB_TOKEN") # or "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  # Replace with your token for testing
     if not token:
         print("Missing GH_PAT or GITHUB_TOKEN environment variable.", file=sys.stderr)
         return 1
