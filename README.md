@@ -1,11 +1,34 @@
-# Autogithubcleaner
+# autogithubcleaner
 
-Delete all unuse forked repo
+Delete forked repositories you no longer contribute to.
 
-## GitHub Actions setup
+## What it does
 
-This workflow needs a personal access token secret, not the default `GITHUB_TOKEN`. Create a secret named `GH_PAT` in the repository settings and use a token with permission to list and delete the repositories you want to clean up.
+This tool checks repositories owned by the authenticated GitHub account, looks for forked repos, and deletes the ones with no authored commits from you. By default it runs in dry-run mode and only prints what it would delete.
 
-For a classic PAT, the `delete_repo` scope is required for deletion. If you use a fine-grained PAT, grant repository administration access for the repos you want the workflow to manage.
+## Requirements
 
-The workflow lives in [.github/workflows/clean-forks.yml](.github/workflows/clean-forks.yml). Run it manually from the Actions tab, leave `delete_repositories` off for a dry run, or set it to true to actually delete matching forked repositories.
+- Python 3.11 or newer
+- A GitHub personal access token stored as `GH_PAT`
+- `requests` installed from `requirements.txt`
+
+For a classic PAT, use the `delete_repo` scope. For a fine-grained PAT, grant repository administration access for the repos you want to manage.
+
+## Run locally
+
+1. Create and activate a virtual environment.
+2. Install dependencies with `pip install -r requirements.txt`.
+3. Set your token, for example `export GH_PAT=your_token_here`.
+4. Run a dry run with `python main.py`.
+5. Delete matching repositories with `python main.py --delete`.
+
+You can also set `DELETE_REPOS=true` instead of passing `--delete`.
+
+## GitHub Actions
+
+The workflow is in [.github/workflows/clean-forks.yml](.github/workflows/clean-forks.yml).
+
+1. Add a repository secret named `GH_PAT` in GitHub Settings.
+2. Open the Actions tab and run **Clean Forked Repositories** manually.
+3. Leave `delete_repositories` set to false for a dry run.
+4. Set `delete_repositories` to true when you want the workflow to delete matching repos.
